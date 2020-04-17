@@ -98,45 +98,53 @@ class SortingRobot:
         """
         Sort the robot's list.
         """
-        arr = self._list
         # Insertion Sort
-        for i in range(1, len(arr)):
-            temp = arr[i]
-            x = i
-            while x > 0 and temp < arr[x-1]:
-                arr[x] = arr[x-1]
-                x -= 1
-            arr[x] = temp
-        return arr
+        # for i in range(1, len(self._list)):
+        #     temp = self._list[i]
+        #     x = i
+        #     while x > 0 and temp < self._list[x-1]:
+        #         self._list[x] = self._list[x-1]
+        #         x -= 1
+        #     self._list[x] = temp
+        # return self._list
 
-        # Mergsort
-        # def mergesort(arr):
-        #     if len(arr) > 1:
-        #         mid = len(arr) // 2
-        #         left = arr[:mid]
-        #         right = arr[mid:]
-        #         mergesort(left)
-        #         mergesort(right)
-        #         i = 0
-        #         x = 0
-        #         k = 0
-        #         while i < len(left) and x < len(right):
-        #             if left[i] < right[x]:
-        #                 arr[k] = left[i]
-        #                 i += 1
-        #             else:
-        #                 arr[k] = right[x]
-        #                 x += 1
-        #             k += 1
-        #         while i < len(left):
-        #             arr[k] = left[i]
-        #             i += 1
-        #             k += 1
-        #         while x < len(right):
-        #             arr[k] = right[x]
-        #             x += 1
-        #             k += 1
-        #     return arr
+        # Selection Sort -> since selection uses a "swap" mechanic of items at different indexes, and the swap method on the SortingRobot class, it's probably worth a switch. Possibly a bubble sort, because there is also a swap and a while true loop to determine when to stop.
+        while True:
+            # start at the beginning of list, and swap picks up first item
+            self.swap_item()
+            # can't move left since we are at the start of the list, so, if you can move right, then move right
+            if self.can_move_right == True:
+                self.move_right()
+                # if robot has higher card, swap and turn light on
+                if self.compare_item() == 1:
+                    self.swap_item()
+                    self.set_light_on()
+                # since we have smaller card now, move left and swap the card
+                self.move_left()
+                self.swap_item()
+                # go back to the right for the next card and repeat
+                self.move_right()
+            else:
+                # if None, swap item
+                if self.compare_item() == None:
+                    self.swap_item()
+                # if light off, do nothing
+                if not self.light_is_on():
+                    break
+                # set it off
+                self.set_light_off()
+                # if robot can move left, move left
+                while self.can_move_left == True:
+                    self.move_left()
+
+        # Bubble Sort -> rough version right now, but you can't access the list directly.
+        while True:
+            for i in range(self._list - 1):
+                if self._list[i] > self._list[i+1]:
+                    # arr[i], arr[i+1] = arr[i+1], arr[i]
+                    self.move_left()
+                    self.swap_item()
+        return self._list
 
 
 if __name__ == "__main__":
